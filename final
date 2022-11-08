@@ -1,0 +1,44 @@
+def canReach(c, x1, y1, x2, y2):
+    # memory. -1 not reachable. 1 reachable
+    dp = {}
+
+    def gonext(x, y):
+        # reuse memory
+        if (x, y) in dp:
+            return dp[(x, y)]
+        # overshoot
+        if x > x2 or y > y2:
+            dp[(x, y)] = -1
+            return dp[(x, y)]
+        # blocked
+        if math.isqrt(x + y) ** 2 == (x + y):
+            dp[(x, y)] = -1
+            return dp[(x, y)]
+        # reach target
+        if x == x2 and y == y2:
+            dp[(x, y)] = 1
+            return dp[(x, y)]
+
+        # go right
+        if gonext(x + y, y) == 1:
+            dp[(x, y)] = 1
+            return dp[(x, y)]
+        # go upper
+        if gonext(x, x + y) == 1:
+            dp[(x, y)] = 1
+            return dp[(x, y)]
+        # go upper right
+        if gonext(x + c, y + c) == 1:
+            dp[(x, y)] = 1
+            return dp[(x, y)]
+
+        dp[(x, y)] = -1
+        return dp[(x, y)]
+    gonext(x1, y1)
+    if (x2, y2) in dp and dp[(x2, y2)] == 1:
+        return "Yes"
+    return "No"
+
+
+if __name__ == '__main__':
+    print(canReach(1, 1, 4, 7, 6))
